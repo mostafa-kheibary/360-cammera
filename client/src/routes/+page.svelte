@@ -6,10 +6,14 @@
 
 	const arr = new Array(24).fill(0);
 	let x: any = null;
+	let isMobile = true;
+
 	const handleClick = () => {
 		x.connect();
 	};
 	onMount(() => {
+		isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+		if (!isMobile) return;
 		const cameraVideoStream = document.getElementById('camera-stream');
 		const canvas = document.getElementById('cam');
 		if (navigator.mediaDevices) {
@@ -78,24 +82,28 @@
 	});
 </script>
 
-<div
-	class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center"
->
-	<video
-		class="opacity-60"
-		id="camera-stream"
-		width="200px"
-		height="500px"
-		autoplay
-		muted
-		playsinline
+{#if isMobile}
+	<div
+		class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center"
 	>
-		<source src="" />
-	</video>
-	<canvas id="cam" class=""></canvas>
-</div>
+		<video
+			class="opacity-60"
+			id="camera-stream"
+			width="200px"
+			height="500px"
+			autoplay
+			muted
+			playsinline
+		>
+			<source src="" />
+		</video>
+		<canvas id="cam" class=""></canvas>
+	</div>
 
-<div class="fixed bottom-5 left-1/2 -translate-x-1/2 justify-center items-center">
-	<button class="bg-white m-5" on:click={handleClick}>permisiion</button>
-	<div><button class="w-10 h-10 bg-white">x</button></div>
-</div>
+	<div class="fixed bottom-5 left-1/2 -translate-x-1/2 justify-center items-center">
+		<button class="bg-white m-5" on:click={handleClick}>permisiion</button>
+		<div><button class="w-10 h-10 bg-white">x</button></div>
+	</div>
+{:else}
+	<h2 class="text-center text-3xl mt-10">open only with mobile devices</h2>
+{/if}
